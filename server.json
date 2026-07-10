@@ -1,0 +1,38 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "ai.pullpush/pullpush-mcp",
+  "description": "43 MCP tools to build connectors and sync any source to any destination via canonical models.",
+  "version": "2.1.1",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "kaduno-pullpush-mcp",
+      "version": "2.1.1",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "PULLPUSH_API_KEY",
+          "description": "Your PullPush API key (admin panel → Settings → API Keys).",
+          "isRequired": true,
+          "isSecret": true,
+          "format": "string"
+        },
+        {
+          "name": "PULLPUSH_API_URL",
+          "description": "API base URL. Override only for self-hosted instances.",
+          "isRequired": false,
+          "format": "string",
+          "default": "https://api.pullpush.ai"
+        }
+      ]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://api.pullpush.ai/mcp"
+    }
+  ]
+}

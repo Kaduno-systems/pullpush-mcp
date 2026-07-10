@@ -1,0 +1,52 @@
+{
+  "name": "kaduno-pullpush-mcp",
+  "version": "2.1.1",
+  "description": "MCP server for PullPush.ai — connect Cursor, Claude, and AI agents to your integration sync engine",
+  "mcpName": "ai.pullpush/pullpush-mcp",
+  "homepage": "https://pullpush.ai/docs/mcp",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kaduno-systems/pullpush-mcp.git"
+  },
+  "type": "module",
+  "bin": {
+    "kaduno-pullpush-mcp": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "prepublishOnly": "npm run build",
+    "dev": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "pullpush",
+    "kaduno",
+    "ai",
+    "cursor",
+    "claude",
+    "integration",
+    "sync",
+    "connector"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsup": "^8.3.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

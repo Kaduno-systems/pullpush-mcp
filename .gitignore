@@ -1,0 +1,8 @@
+node_modules/
+dist/
+
+# Never commit secrets — this package is published publicly
+*.pem
+*.key
+.env
+.env.*
