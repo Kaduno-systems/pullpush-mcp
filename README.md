@@ -39,10 +39,10 @@ Add this to `~/.cursor/mcp.json` (Cursor) or the MCP config for your client. Tha
 
 ## CLI Flags
 
-```bash
-npx kaduno-pullpush-mcp --help      # Show usage help
-npx kaduno-pullpush-mcp --version   # Show version
-```
+| Flag | Description |
+| --- | --- |
+| `--help` | Show usage help |
+| `--version` | Show version |
 
 ## Auth Levels
 
@@ -107,8 +107,8 @@ For connector authors, platform admins, and internal developers, see [pullpush-m
 ## Development
 
 ```bash
-git clone <repo-url>
-cd publish/mcp
+git clone https://github.com/Kaduno-systems/pullpush-mcp.git
+cd pullpush-mcp
 npm install
 npm run dev    # Run from source via tsx
 npm run build  # Compile with tsup
