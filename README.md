@@ -39,7 +39,9 @@ curl -X POST https://api.pullpush.ai/api/sandbox
 Returns a free 48-hour sandbox tenant: an API key, ready-to-paste MCP configs, and two
 pre-wired demo connections whose stock data deliberately disagrees — so your first
 `pullpush.sync` `action:"preview"` shows a real canonical diff (drifted quantities, a missing
-item, in-sync rows). The sandbox deletes itself on expiry.
+item, in-sync rows). The sandbox deletes itself on expiry — or keep it:
+`POST /api/sandbox/claim` (Bearer = the sandbox key, `{"email": "..."}`) converts it to a
+persistent free tenant with everything you built preserved.
 
 ## Quick start
 
