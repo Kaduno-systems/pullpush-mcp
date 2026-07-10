@@ -1,7 +1,7 @@
 {
   "name": "kaduno-pullpush-mcp",
-  "version": "2.1.1",
-  "description": "MCP server for PullPush.ai — connect Cursor, Claude, and AI agents to your integration sync engine",
+  "version": "2.1.2",
+  "description": "Connect any two APIs and keep them in sync — the official MCP server for PullPush.ai. Shadow-mode previews, canonical data models, reconciliation, diagnostics.",
   "mcpName": "ai.pullpush/pullpush-mcp",
   "homepage": "https://pullpush.ai/docs/mcp",
   "repository": {
