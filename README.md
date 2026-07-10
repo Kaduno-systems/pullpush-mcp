@@ -54,9 +54,9 @@ The tools available depend on your API key scope:
 | **Org key** | All tenants in your organization (read or read+write) |
 | **Admin key** | Full platform access (billing, partners, all tenants) |
 
-## Tools Overview
+## Tools
 
-The MCP server exposes tools covering:
+The MCP server exposes 43 tools (137 actions across 16 domain routers) covering:
 
 - **Connections** — create, test, configure source and destination connectors
 - **Flows** — create and manage sync flows between connections
