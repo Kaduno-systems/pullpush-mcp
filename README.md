@@ -30,6 +30,17 @@ without a human clicking through a dashboard.
 - **Server-grade reliability.** Circuit breakers, per-key ordered delivery, idempotency,
   dead-letter queue with retry, exponential backoff.
 
+## Try it in 60 seconds — no signup
+
+```bash
+curl -X POST https://api.pullpush.ai/api/sandbox
+```
+
+Returns a free 48-hour sandbox tenant: an API key, ready-to-paste MCP configs, and two
+pre-wired demo connections whose stock data deliberately disagrees — so your first
+`pullpush.sync` `action:"preview"` shows a real canonical diff (drifted quantities, a missing
+item, in-sync rows). The sandbox deletes itself on expiry.
+
 ## Quick start
 
 No clone or install needed — run directly via `npx`:
@@ -68,6 +79,8 @@ catalog connectors → create + test connections → suggest a field mapping →
 shadow mode → preview the diff → cut over.
 
 ## Getting an API key
+
+For a throwaway key, use the sandbox above. For a persistent tenant:
 
 1. [Sign up free](https://app.pullpush.ai/sign-up) (1 connection, 1,000 events/month — no card)
 2. Admin panel → **Settings → API Keys**
