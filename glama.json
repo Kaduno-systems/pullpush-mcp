@@ -1,0 +1,6 @@
+{
+  "$schema": "https://glama.ai/mcp/schemas/server.json",
+  "name": "PullPush MCP",
+  "description": "Connect any two APIs and keep them in sync — 45 MCP tools with shadow previews, canonical data models, reconciliation, and diagnostics.",
+  "maintainers": ["runechristensen-kloner"]
+}
