@@ -88,22 +88,94 @@ For a throwaway key, use the sandbox above. For a persistent tenant:
 2. Admin panel → **Settings → API Keys**
 3. Create a key with the scope you need (tenant, org, or admin)
 
-## What's inside
+## Tools
 
-**45 tools** (**28 explicit tools** plus **173 actions** across 17 domain routers) covering the
-full integration lifecycle:
+**45 tools** covering the full integration lifecycle. 28 are individually-named (explicit) tools;
+17 are domain routers that each accept an `action` parameter with multiple operations.
 
-- **Connections** — create, test, and configure links to external systems (23+ built-in
-  platforms: Shopify, WooCommerce, Magento, Amazon, Linnworks, Xero, HubSpot, …); any REST,
-  GraphQL, or MCP API via the AI connector builder
-- **Flows** — wire source → destination sync pipelines in canonical data models
-  (stock levels, products, orders)
-- **Sync** — preview, reconcile, and monitor; structured diffs in canonical space
-- **Shadow mode** — run new integrations read-only until proven, then cut over
-- **Diagnostics** — `pullpush.explain` diagnoses failures with evidence and suggested fixes
-- **Ops** — health dashboards, anomaly detection, dead-letter recovery
-- **Workflows** — multi-step DAG automations with branches, delays, and lookups
-- **Import/Export** — file-based data in and out
+### Connections
+
+- `pullpush.connection.create` — Create and configure a connection to an external system (Shopify, WooCommerce, Linnworks, Xero, HubSpot, and 20+ more)
+- `pullpush.connection.test` — Test live connection credentials; returns health metrics and failure count
+- `pullpush.connection` — List, get, update, delete, and configure connections (router with actions: list, get, update, delete, health, config)
+
+### Flows
+
+- `pullpush.flow.create` — Wire a source→destination sync pipeline with triggers, mapping, and canonical data models
+- `pullpush.flow.dryRun` — Dry-run an event through flow transform/filter without delivery; returns mapped payload
+- `pullpush.flow.natural` — Create a flow from a natural-language description; proposes mapping and creates in shadow mode
+- `pullpush.flow` — List, get, update, pause/resume, delete flows and view delivery history (router)
+
+### Sync & reconciliation
+
+- `pullpush.sync.reconcile` — Reconcile-and-deliver: diff source vs destination, then deliver changes with per-item progress
+- `pullpush.sync` — Preview diffs, snapshot data, inspect single keys, scan catalogs, diagnose unmatched SKUs, manage baselines (router with actions: preview, snapshot, inspect, reconcile, scan, reset-baseline, baseline.history, baseline.rollback, channel-cache, unmatched)
+
+### Field mapping
+
+- `pullpush.mapping.suggest` — AI-proposes field mapping from source sample to target shape; returns mapping, confidence, preview
+- `pullpush.mapping.validate` — Validate a mapping config against source and destination schemas
+- `pullpush.mapping.compare` — Compare two mappings side by side
+- `pullpush.mapping.explain` — Explain how a mapping transforms data, step by step
+- `pullpush.mapping.diff` — Diff two mapping versions to see what changed
+- `pullpush.mapping.get` — Get a flow's current mapping config, source fields, and destination fields
+
+### Diagnostics
+
+- `pullpush.explain` — Diagnose why a flow, connection, or delivery failed; gathers errors, identifies patterns, suggests fixes
+- `pullpush.diagnose.recent` — Scan all flows for recent failures; returns a prioritized issue list
+- `pullpush.ask` — Answer natural-language ops questions using tenant failures and anomalies
+
+### Connector authoring
+
+- `pullpush.connector.generate` — AI-generates TypeScript connector code, typechecks, tests, and registers
+- `pullpush.connector` — List, get, update, and manage connector definitions (router)
+
+### Data operations
+
+- `pullpush.data.push` — Push file data (CSV, JSON, XML) into a connection
+- `pullpush.import` — File-based data import operations (router)
+- `pullpush.export` — Scheduled export pipelines: create, list, update, delete, test, run (router)
+- `pullpush.canonical` — Inspect and manage canonical data models (router)
+
+### Shadow mode & safety
+
+- `pullpush.shadow` — Run integrations read-only before going live; compare shadow vs live results (router)
+
+### Batch operations
+
+- `pullpush.batch.test` — Test multiple connections in parallel
+- `pullpush.batch.status` — Get status matrix across all flows
+- `pullpush.batch.setup` — One-call setup: create connections + flow + test in one operation
+- `pullpush.batch` — Multi-flow batch operations and proactive reports (router)
+
+### Ops & health
+
+- `pullpush.health.overview` — Tenant health dashboard: connections, flows, failures, backlog, delivery rate, anomalies
+- `pullpush.health.mcp` — MCP server health: database, tools registered, uptime
+- `pullpush.ops` — Anomaly detection, dead-letter recovery, operation monitoring (router)
+
+### Workflows
+
+- `pullpush.workflow.create` — Create multi-step workflow with trigger and step DAG
+- `pullpush.workflow.trigger` — Manually trigger a workflow run from an existing event
+- `pullpush.workflow` — List, get, and manage workflows (router)
+
+### Integrations & marketplace
+
+- `pullpush.integration.create` — Create an integration grouping flows/workflows under one name
+- `pullpush.integration` — List and manage integrations (router)
+- `pullpush.marketplace.install` — Install a marketplace listing into your tenant
+- `pullpush.marketplace` — Browse and manage marketplace connectors (router)
+- `pullpush.destination.provision` — Provision custom fields on destination API (e.g. HubSpot properties)
+
+### Administration
+
+- `pullpush.tenant` — Tenant management: list, get, create, update (router)
+- `pullpush.billing` — Subscription and usage management (router)
+- `pullpush.partner` — Partner program operations (router)
+- `pullpush.backup` — Backup and restore operations (router)
+- `pullpush.feedback` — Submit feedback about MCP tool quality or missing features
 
 Full tool reference: [pullpush.ai/docs/mcp](https://pullpush.ai/docs/mcp)
 
