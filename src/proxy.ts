@@ -15,6 +15,40 @@ import type { Env } from './env.js';
 const PKG_NAME = 'kaduno-pullpush-mcp';
 const REFRESH_INTERVAL_MS = 5 * 60 * 1000;
 
+interface RawTool {
+  name: string;
+  title?: string;
+  description?: string;
+  inputSchema?: Record<string, unknown>;
+  outputSchema?: Record<string, unknown>;
+  annotations?: Record<string, unknown>;
+}
+
+/**
+ * Fallback: fetch tools/list via raw HTTP when the SDK client validation rejects
+ * the response (e.g. server returns Zod shapes instead of JSON Schema).
+ */
+async function fetchToolsRaw(apiUrl: string, apiKey: string, sessionId?: string): Promise<RawTool[]> {
+  const url = new URL('/mcp', apiUrl);
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json, text/event-stream',
+    Authorization: `Bearer ${apiKey}`,
+  };
+  if (sessionId) headers['Mcp-Session-Id'] = sessionId;
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ jsonrpc: '2.0', method: 'tools/list', params: {}, id: 99 }),
+  });
+  const text = await res.text();
+  const dataLine = text.split('\n').find((l) => l.startsWith('data: '));
+  if (!dataLine) return [];
+  const parsed = JSON.parse(dataLine.slice(6));
+  return parsed?.result?.tools ?? [];
+}
+
 const QUICKSTART = `# PullPush MCP — Quick Start
 
 ## What is this?
@@ -87,9 +121,24 @@ export async function startProxy(env: Env, version: string): Promise<void> {
     process.exit(1);
   }
 
-  let toolsCache = await remoteClient.listTools().catch(() => ({ tools: [] }));
-  let resourcesCache = await remoteClient.listResources().catch(() => ({ resources: [] }));
-  let promptsCache = await remoteClient.listPrompts().catch(() => ({ prompts: [] }));
+  let toolsCache = await remoteClient.listTools().catch(async (err) => {
+    process.stderr.write(`[${PKG_NAME}] SDK listTools validation failed, trying raw fallback...\n`);
+    const rawTools = await fetchToolsRaw(env.PULLPUSH_API_URL, env.PULLPUSH_API_KEY).catch(() => []);
+    if (rawTools.length > 0) {
+      process.stderr.write(`[${PKG_NAME}] Raw fallback got ${rawTools.length} tools\n`);
+      return { tools: rawTools as Awaited<ReturnType<typeof remoteClient.listTools>>['tools'] };
+    }
+    process.stderr.write(`[${PKG_NAME}] listTools failed: ${err instanceof Error ? err.message : String(err)}\n`);
+    return { tools: [] as Awaited<ReturnType<typeof remoteClient.listTools>>['tools'] };
+  });
+  let resourcesCache = await remoteClient.listResources().catch((err) => {
+    process.stderr.write(`[${PKG_NAME}] listResources failed: ${err instanceof Error ? err.message : String(err)}\n`);
+    return { resources: [] as Awaited<ReturnType<typeof remoteClient.listResources>>['resources'] };
+  });
+  let promptsCache = await remoteClient.listPrompts().catch((err) => {
+    process.stderr.write(`[${PKG_NAME}] listPrompts failed: ${err instanceof Error ? err.message : String(err)}\n`);
+    return { prompts: [] as Awaited<ReturnType<typeof remoteClient.listPrompts>>['prompts'] };
+  });
 
   const refreshCatalog = async () => {
     try {
@@ -113,9 +162,9 @@ export async function startProxy(env: Env, version: string): Promise<void> {
     { name: PKG_NAME, version },
     {
       capabilities: {
-        tools: toolsCache.tools.length > 0 ? {} : undefined,
+        tools: {},
         resources: {},
-        prompts: promptsCache.prompts.length > 0 ? {} : undefined,
+        prompts: {},
       },
     },
   );

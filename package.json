@@ -1,6 +1,6 @@
 {
   "name": "kaduno-pullpush-mcp",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "Connect any two APIs and keep them in sync — the official MCP server for PullPush.ai. Shadow-mode previews, canonical data models, reconciliation, diagnostics.",
   "mcpName": "ai.pullpush/pullpush-mcp",
   "homepage": "https://pullpush.ai/docs/mcp",
