@@ -90,8 +90,9 @@ For a throwaway key, use the sandbox above. For a persistent tenant:
 
 ## Tools
 
-**45 tools** covering the full integration lifecycle. 28 are individually-named (explicit) tools;
-17 are domain routers that each accept an `action` parameter with multiple operations.
+**48 tools** (**30 explicit tools** plus **184 actions** across 18 domain routers) covering the
+full integration lifecycle. Explicit tools are individually named; domain routers accept an
+`action` parameter with multiple operations.
 
 ### Connections
 
@@ -242,3 +243,7 @@ developed in a private monorepo. Issues and questions are welcome here or at
 ## License
 
 MIT
+
+## Development
+
+Development happens in the PullPush platform monorepo; the [Kaduno-systems/pullpush-mcp](https://github.com/Kaduno-systems/pullpush-mcp) repository is a published mirror of each release. Issues are welcome there; code changes land via the monorepo.

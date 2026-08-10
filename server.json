@@ -1,8 +1,8 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "ai.pullpush/pullpush-mcp",
-  "description": "Connect any two APIs and keep them in sync — 45 MCP tools with shadow previews and diagnostics.",
-  "version": "2.2.0",
+  "description": "Connect any two APIs and keep them in sync — 48 MCP tools with shadow previews, reconciliation, and diagnostics.",
+  "version": "2.2.1",
   "websiteUrl": "https://pullpush.ai",
   "repository": {
     "url": "https://github.com/Kaduno-systems/pullpush-mcp",
@@ -12,7 +12,7 @@
     {
       "registryType": "npm",
       "identifier": "kaduno-pullpush-mcp",
-      "version": "2.2.0",
+      "version": "2.2.1",
       "transport": {
         "type": "stdio"
       },
@@ -37,7 +37,24 @@
   "remotes": [
     {
       "type": "streamable-http",
-      "url": "https://api.pullpush.ai/mcp"
+      "url": "https://api.pullpush.ai/mcp",
+      "authorizationUrl": "https://app.pullpush.ai/api/auth/oauth2/authorize",
+      "tokenUrl": "https://app.pullpush.ai/api/auth/oauth2/token",
+      "registrationUrl": "https://app.pullpush.ai/api/auth/oauth2/register",
+      "protectedResourceMetadata": "https://api.pullpush.ai/.well-known/oauth-protected-resource",
+      "scopes": [
+        "openid",
+        "profile",
+        "email",
+        "mcp:read",
+        "mcp:write"
+      ]
     }
-  ]
+  ],
+  "links": {
+    "privacy": "https://pullpush.ai/privacy",
+    "terms": "https://pullpush.ai/terms",
+    "support": "https://pullpush.ai/support",
+    "documentation": "https://pullpush.ai/docs/mcp"
+  }
 }
