@@ -45,24 +45,8 @@ persistent free tenant with everything you built preserved.
 
 ## Quick start
 
-No clone or install needed — run directly via `npx`:
-
-```json
-{
-  "mcpServers": {
-    "pullpush": {
-      "command": "npx",
-      "args": ["-y", "kaduno-pullpush-mcp@latest"],
-      "env": {
-        "PULLPUSH_API_KEY": "<your-api-key>"
-      }
-    }
-  }
-}
-```
-
-Add this to `~/.cursor/mcp.json` (Cursor), Claude Desktop's config, or the MCP config for your
-client. Prefer a remote server? Connect straight to the hosted endpoint instead:
+Connect straight to the hosted endpoint. It is the most robust option — nothing runs on your
+machine, so there is no process to crash or go stale:
 
 ```json
 {
@@ -75,6 +59,36 @@ client. Prefer a remote server? Connect straight to the hosted endpoint instead:
   }
 }
 ```
+
+Add this to `~/.cursor/mcp.json` (Cursor), Claude Desktop's config, or the MCP config for your
+client.
+
+### Clients that only speak stdio
+
+Use this package as a local stdio proxy to the same endpoint. Install a pinned version once and
+run the binary — do not use `npx ...@latest`, which re-resolves the package (and needs the
+network) every time your client starts the server:
+
+```bash
+npm i -g kaduno-pullpush-mcp@2.3.0
+```
+
+```json
+{
+  "mcpServers": {
+    "pullpush": {
+      "command": "kaduno-pullpush-mcp",
+      "env": { "PULLPUSH_API_KEY": "<your-api-key>" }
+    }
+  }
+}
+```
+
+The proxy never exits because the API is unreachable: it starts, answers your client, and
+connects in the background (exponential backoff, honouring `Retry-After`). It reconnects after a
+network blip or an API restart, and while it is offline a tool call returns a retryable
+"reconnecting" error that changes nothing. The tool catalogue is cached on disk, so a restart
+while the API is down still lists your tools.
 
 Then ask your agent to run the **`get-started`** prompt — it walks through the whole flow:
 catalog connectors → create + test connections → suggest a field mapping → create the flow in
@@ -90,7 +104,7 @@ For a throwaway key, use the sandbox above. For a persistent tenant:
 
 ## Tools
 
-**48 tools** (**30 explicit tools** plus **184 actions** across 18 domain routers) covering the
+**48 tools** (**30 explicit tools** plus **188 actions** across 18 domain routers) covering the
 full integration lifecycle. Explicit tools are individually named; domain routers accept an
 `action` parameter with multiple operations.
 
@@ -186,6 +200,8 @@ Full tool reference: [pullpush.ai/docs/mcp](https://pullpush.ai/docs/mcp)
 | --- | --- | --- | --- |
 | `PULLPUSH_API_KEY` | Yes | — | Your PullPush API key |
 | `PULLPUSH_API_URL` | No | `https://api.pullpush.ai` | API base URL (override for self-hosted) |
+| `PULLPUSH_CACHE_DIR` | No | OS cache directory | Where the tool catalogue is cached |
+| `PULLPUSH_TIMEOUT_MS` | No | `55000` | How long a tool call may take before the proxy answers with a timeout error |
 
 ## Auth scopes
 
@@ -199,8 +215,10 @@ Tools are automatically scoped: a tenant key never sees another tenant's data.
 
 ## Features
 
+- **Never dies on a bad connection**: starts even when the API is down, reconnects on its own,
+  and serves a cached tool catalogue meanwhile
 - **Auto-refresh**: tool catalog refreshes every 5 minutes — new server-side tools appear
-  without a restart
+  without a restart (clients are notified only when the catalogue really changed)
 - **Offline quickstart**: built-in `pullpush://docs/quickstart-local` resource works without
   network
 - **Retry on unknown tool**: automatically refreshes the catalog when a tool is not found

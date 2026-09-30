@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
+// A stray error from a background timer or the HTTP transport must not end the session: the proxy
+// heals itself (it reconnects), while a dead stdio server is never respawned by the client.
 process.on('uncaughtException', (err) => {
-  process.stderr.write(`[kaduno-pullpush-mcp] Fatal: ${err.message}\n${err.stack ?? ''}\n`);
-  process.exit(1);
+  process.stderr.write(`[kaduno-pullpush-mcp] Unexpected error (continuing): ${err.message}\n${err.stack ?? ''}\n`);
 });
 process.on('unhandledRejection', (reason) => {
   const msg = reason instanceof Error ? reason.message : String(reason);
@@ -44,13 +45,14 @@ if (args.includes('--help') || args.includes('-h')) {
       `  npx kaduno-pullpush-mcp --version  Show version\n\n` +
       `Environment:\n` +
       `  PULLPUSH_API_KEY   (required) Your PullPush API key\n` +
-      `  PULLPUSH_API_URL   (optional) API URL (default: https://api.pullpush.ai)\n\n` +
+      `  PULLPUSH_API_URL   (optional) API URL (default: https://api.pullpush.ai)\n` +
+      `  PULLPUSH_CACHE_DIR (optional) Where the tool catalogue is cached (default: OS cache dir)\n\n` +
+      `Install once: npm i -g kaduno-pullpush-mcp@${version}\n` +
       `Config (Cursor ~/.cursor/mcp.json):\n` +
       `  {\n` +
       `    "mcpServers": {\n` +
       `      "pullpush": {\n` +
-      `        "command": "npx",\n` +
-      `        "args": ["-y", "kaduno-pullpush-mcp@latest"],\n` +
+      `        "command": "kaduno-pullpush-mcp",\n` +
       `        "env": { "PULLPUSH_API_KEY": "<your-key>" }\n` +
       `      }\n` +
       `    }\n` +

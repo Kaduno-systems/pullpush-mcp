@@ -1,6 +1,6 @@
 {
   "name": "kaduno-pullpush-mcp",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "Connect any two APIs and keep them in sync — the official MCP server for PullPush.ai. Shadow-mode previews, canonical data models, reconciliation, diagnostics.",
   "mcpName": "ai.pullpush/pullpush-mcp",
   "homepage": "https://pullpush.ai/docs/mcp",
@@ -19,9 +19,10 @@
   ],
   "scripts": {
     "build": "tsup",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm run build && npm test",
     "dev": "tsx src/index.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit -p tsconfig.test.json",
+    "test": "vitest run"
   },
   "keywords": [
     "mcp",
@@ -44,7 +45,8 @@
     "@types/node": "^22.10.0",
     "tsup": "^8.3.0",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "vitest": "^3.2.7"
   },
   "engines": {
     "node": ">=20.0.0"
