@@ -104,7 +104,7 @@ For a throwaway key, use the sandbox above. For a persistent tenant:
 
 ## Tools
 
-**48 tools** (**30 explicit tools** plus **188 actions** across 18 domain routers) covering the
+**50 tools** (**30 explicit tools** plus **227 actions** across 20 domain routers) covering the
 full integration lifecycle. Explicit tools are individually named; domain routers accept an
 `action` parameter with multiple operations.
 

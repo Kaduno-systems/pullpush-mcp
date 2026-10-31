@@ -367,7 +367,7 @@ export async function startResilientProxy(
             `**Error: Tool \`${name}\` did not respond within ${callTimeoutMs / 1000}s**`,
             '',
             '**What to do:** The operation may still be running on the server.',
-            '- Use `pullpush.ops action=operation.list` to check for background operations',
+            '- Use `pullpush.ops action=operations.list` to check for background operations',
             '- Retry with `background=true` in params to get an operationId immediately',
             '- Use narrower parameters (single key, limit, diffFilter) for faster results',
             '',
@@ -380,7 +380,7 @@ export async function startResilientProxy(
         code: 'PROXY_TIMEOUT',
         message: `Tool ${name} did not respond within ${callTimeoutMs / 1000}s`,
         suggestion: 'The operation may still be running server-side. Try with background=true or narrower params.',
-        suggestedTool: 'pullpush.ops action=operation.list',
+        suggestedTool: 'pullpush.ops action=operations.list',
         retryable: true,
       },
     });
